@@ -83,4 +83,34 @@ class AdminCategoryController extends AbstractController
 
         return $this->render('admin/categoryupdate.html.twig', ['categoryForm' => $categoryForm->createView()]);
     }
+
+
+    /**
+     * @Route("/admin/search/", name="admin_search")
+     */
+    public function adminSearch(CategoryRepository $categoryRepository, Request $request)
+    {
+        $term = $request->query->get('term');
+
+        $categorys = $categoryRepository->searchByTerm($term);
+
+        return $this->render('admin/search.html.twig', ['categorys' => $categorys]);
+    }
+
+
+    /**
+     * @Route("admin/delete/category/{id}", name="admin_category_delete")
+     */
+    public function deleteCategory($id, CategoryRepository $categoryRepository, EntityManagerInterface $entityManagerInterface)
+    {
+        $category = $categoryRepository->find($id);
+        $entityManagerInterface->remove($category);
+        $entityManagerInterface->flush();
+        $this->addFlash(
+            'notice',
+            'Votre category a été supprimé'
+        );
+
+        return $this->redirectToRoute("admin_category_list");
+    }
 }

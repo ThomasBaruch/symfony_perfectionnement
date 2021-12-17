@@ -1,0 +1,12 @@
+{% extends "front/base.html.twig" %}
+
+{% block main %}
+
+	<h2>{{ media.title }}</h2>
+	<h3>{{ media.alt }}</h3>
+
+
+		<img src="{{ asset('media/' ~ media.src )}}" alt="{{ media.alt }}">
+
+
+{% endblock %}
